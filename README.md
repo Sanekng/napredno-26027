@@ -6,11 +6,13 @@ Program učitava rezervacije iz CSV datoteke, računa iznos svake rezervacije
 ## Struktura projekta
 
 - `obrada.py` - pokretanje programa.
-- `models.py` - klasa `Reservation`.
-- `sources.py` - `CsvReservationSource`, memorijski izvor i `ReservationSource`
-  protokol.
-- `reports.py` - `TextReportWriter` i `ReportWriter` protokol.
-- `service.py` - `ReservationService`, koji koordinira obradu.
+- `reservation_app/` - Python paket sa kodom aplikacije:
+  - `models.py` - klasa `Reservation`.
+  - `sources.py` - CSV izvor, memorijski izvor i `ReservationSource` protokol.
+  - `reports.py` - `TextReportWriter` i `ReportWriter` protokol.
+  - `service.py` - `ReservationService`, koji koordinira obradu.
+- `data/rezervacije.csv` - primjer ulaznih podataka.
+- `output/` - direktorij za generisani izvještaj.
 - `tests/test_service.py` - pytest testovi.
 
 CSV red ima oblik `ime,broj_noćenja,cijena_po_noćenju`, na primjer:
@@ -48,8 +50,15 @@ Pokrenite program sa CSV datotekom:
 python obrada.py rezervacije.csv
 ```
 
-Program zapisuje `izvjestaj.txt` u trenutni direktorij. Ako se putanja ne
-navede, koristi `rezervacije.csv`.
+Program zapisuje `output/izvjestaj.txt`. Ako se putanja ne navede, koristi
+`data/rezervacije.csv`. Podrazumijevane putanje se računaju u odnosu na
+direktorij projekta, pa se program može pokrenuti i iz drugog direktorija.
+
+Za pokretanje sa primjerom:
+
+```text
+python obrada.py
+```
 
 ## Testovi
 
@@ -58,17 +67,19 @@ pytest
 ```
 
 Testovi koriste `MemoryReservationSource`, pa za testiranje nije potrebna
-stvarna CSV datoteka. Isti `ReservationService` radi i sa CSV i sa
-memorijskim izvorom.
+stvarna CSV datoteka. Isti `ReservationService` radi i sa CSV i sa memorijskim
+izvorom.
+
+Testovi se mogu pokrenuti i direktno:
+
+```text
+python tests/test_service.py
+```
 
 ## AI usage
 
-Korišten je korisnički prompt za ovaj zadatak: “Mini Project 1 – Refactoring
-Reservation Processing”, sa zahtjevima za refaktoriranje `obrada.py`, SRP,
-DIP, Python `Protocol`, alternativni izvor, pytest testove i README.
+AI je korišten kao pomoć pri refaktoriranju koda i pisanju testova.
 
-Izvorni kod je bio jedna klasa koja je učitavala CSV, računala iznose, pisala
-izvještaj i ispisivala ukupnu vrijednost. Kod je razdvojen u modele, izvore,
-izvještaj i servis. Dodati su konstruktorom proslijeđeni zavisni objekti,
-memorijski izvor i tri testa. Iznosi koriste `Decimal`, a `obrada.py` je
-zadržan kao ulazna tačka programa.
+Originalni kod je podijeljen u manje klase. Dodani su Protocol interfejsi i testovi koji koriste alternativni izvor podataka.
+
+Pregledao sam generisani kod i napravio izmjene kako bi bio jednostavniji i razumljiviji.

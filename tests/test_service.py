@@ -1,9 +1,14 @@
+import sys
 from decimal import Decimal
+from pathlib import Path
 
-from models import Reservation
-from reports import ReportWriter
-from service import ReservationService
-from sources import MemoryReservationSource
+# This allows the file to be run directly as well as through pytest.
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from reservation_app.reports import ReportWriter
+from reservation_app.service import ReservationService
+from reservation_app.models import Reservation
+from reservation_app.sources import MemoryReservationSource
 
 
 class MemoryReportWriter:
@@ -45,3 +50,9 @@ def test_empty_reservation_list_generates_empty_report():
 
     assert service.process() == []
     assert writer.amounts == []
+
+
+if __name__ == "__main__":
+    import pytest
+
+    raise SystemExit(pytest.main([__file__]))

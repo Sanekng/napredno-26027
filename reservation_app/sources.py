@@ -3,7 +3,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Protocol
 
-from models import Reservation
+from .models import Reservation
 
 
 class ReservationSource(Protocol):
@@ -20,13 +20,9 @@ class CsvReservationSource:
         with self.path.open(newline="", encoding="utf-8") as file:
             for row in csv.reader(file):
                 reservations.append(
-                    Reservation(row[0], int(row[1]), self._price(row[2]))
+                    Reservation(row[0], int(row[1]), Decimal(row[2]))
                 )
         return reservations
-
-    @staticmethod
-    def _price(value: str) -> Decimal:
-        return Decimal(value)
 
 
 class MemoryReservationSource:

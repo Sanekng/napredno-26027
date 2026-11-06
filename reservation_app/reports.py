@@ -16,5 +16,6 @@ class TextReportWriter:
         values = ", ".join(f"{amount:.2f}" for amount in amounts)
         total = sum(amounts, Decimal("0"))
         report = f"Iznosi: [{values}]\nUkupno: {total:.2f}\n"
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         self.path.write_text(report, encoding="utf-8")
         print("Poslato:", total)
